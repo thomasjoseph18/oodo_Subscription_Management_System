@@ -1,0 +1,164 @@
+@import "tailwindcss";
+
+/* Tokens from design.md */
+@theme {
+  --color-primary: #714b67;
+  --color-primary-hover: #604058;
+  --color-primary-active: #5a3c52;
+  --color-secondary: #017e84;
+  --color-secondary-hover: #016b70;
+  --color-link: #714b67;
+  --color-link-hover: #432c3d;
+  --color-subtle: #f3f4f6;
+  --color-surface: #f8f9fa;
+  --color-line: #d8dadd;
+  --color-body: #374151;
+  --color-muted: #6c757d;
+  --color-heading: #111827;
+  --color-success: #28a745;
+  --color-info: #17a2b8;
+  --color-warning: #ffc107;
+  --color-danger: #dc3545;
+
+  --font-sans: "Inter", sans-serif;
+  --font-script: "Caveat", cursive;
+
+  --radius-btn: 0.4rem;
+  --radius-sm: 0.5rem;
+  --radius-md: 0.75rem;
+  --radius-lg: 1.25rem;
+  --radius-xl: 1.5rem;
+
+  --shadow-sm: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.075);
+  --shadow-md: 0 0.5rem 1rem rgba(0, 0, 0, 0.1);
+  --shadow-lg: 0 1rem 3rem rgba(0, 0, 0, 0.175);
+
+  --breakpoint-sm: 576px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 992px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-2xl: 1400px;
+}
+
+@layer base {
+  body {
+    @apply bg-white font-sans text-base text-body;
+    line-height: 1.5;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold text-heading;
+    line-height: 1.2;
+  }
+  a {
+    @apply text-link;
+  }
+  a:hover {
+    @apply text-link-hover;
+  }
+  :focus-visible {
+    outline: none;
+    box-shadow: 0 0 0 0.25rem rgba(113, 75, 103, 0.25);
+  }
+}
+
+@layer components {
+  .btn {
+    @apply inline-flex cursor-pointer items-center justify-center gap-2 rounded-btn border border-transparent font-semibold;
+    padding: 0.75rem 1.5rem;
+    transition: background-color 0.2s ease-in-out;
+  }
+  .btn-sm {
+    padding: 0.4rem 0.9rem;
+    font-size: 0.875rem;
+  }
+  .btn:disabled {
+    @apply cursor-not-allowed opacity-65;
+  }
+  .btn:active:not(:disabled) {
+    box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  }
+  .btn-primary {
+    @apply bg-primary text-white hover:bg-primary-hover hover:text-white;
+  }
+  .btn-secondary {
+    @apply bg-secondary text-white hover:bg-secondary-hover hover:text-white;
+  }
+  .btn-light {
+    @apply bg-subtle text-primary hover:bg-[#e6e9ed];
+  }
+  .btn-outline {
+    @apply border-primary bg-transparent text-[#65435c] hover:bg-primary hover:text-white;
+  }
+  .btn-danger {
+    @apply bg-danger text-white hover:bg-[#bb2d3b] hover:text-white;
+  }
+  .card {
+    @apply min-w-0 rounded-md border border-line bg-white p-6;
+  }
+  .input {
+    @apply w-full border border-line bg-white text-heading;
+    padding: 0.75rem;
+    border-radius: 0.25rem;
+    transition: border-color 0.05s ease-in-out;
+  }
+  .input:focus {
+    @apply border-primary;
+  }
+  .badge {
+    @apply inline-block rounded-sm whitespace-nowrap;
+    font-size: 0.75rem;
+    font-weight: 500;
+    padding: 0.5em 0.8em;
+  }
+  .display {
+    font-family: var(--font-script);
+    font-weight: 700;
+    line-height: 1;
+    color: var(--color-heading);
+  }
+  .display-1 {
+    font-size: min(calc(1.675rem + 5.1vw), 5.5rem);
+  }
+  .display-3 {
+    font-size: min(calc(1.525rem + 3.3vw), 4rem);
+  }
+  .display-5 {
+    font-size: min(calc(1.325rem + 0.9vw), 2rem);
+    line-height: 1.1;
+  }
+  .doodle {
+    font-family: var(--font-script);
+    font-weight: 700;
+    color: var(--color-primary);
+    font-size: calc(1.325rem + 0.9vw);
+    line-height: 1.1;
+    transform: rotate(-10deg);
+  }
+  .app-tile {
+    @apply flex flex-col items-center gap-2 text-center no-underline;
+    transition: all 0.2s ease-in-out;
+  }
+  .app-tile:hover {
+    transform: translateY(-0.25rem);
+  }
+  .highlight {
+    position: relative;
+    white-space: nowrap;
+    z-index: 0;
+  }
+  .highlight svg {
+    position: absolute;
+    left: -3%;
+    bottom: -0.05em;
+    width: 106%;
+    height: 0.45em;
+    z-index: -1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  * {
+    transition: none !important;
+    animation: none !important;
+  }
+}
