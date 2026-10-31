@@ -30,9 +30,19 @@ class InvoiceSerializer(serializers.ModelSerializer):
 
 class InvoiceDetailSerializer(InvoiceSerializer):
     lines = InvoiceLineSerializer(many=True, read_only=True)
+    payments = serializers.SerializerMethodField()
 
     class Meta(InvoiceSerializer.Meta):
-        fields = InvoiceSerializer.Meta.fields + ["lines"]
+        fields = InvoiceSerializer.Meta.fields + ["lines", "payments"]
+
+    def get_payments(self, obj):
+        return [
+            {
+                "id": allocation.id, "reference": allocation.payment.reference, "method": allocation.payment.method,
+                "paid_on": allocation.payment.paid_on, "amount": allocation.amount,
+            }
+            for allocation in obj.allocations.select_related("payment")
+        ]
 
 
 class BillingRunSerializer(serializers.ModelSerializer):

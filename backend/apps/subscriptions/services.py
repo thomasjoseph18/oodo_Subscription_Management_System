@@ -4,6 +4,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from apps.audit_logs.services import record
+from apps.discounts import services as discounts
 from apps.notifications.services import notify
 from apps.plans.services import ensure_available, line_unit_price
 from apps.quotations.services import build_lines
@@ -50,7 +51,7 @@ def _create(user, customer, plan, start_date, expiry_date, payment_term, lines, 
     subscription = Subscription.objects.create(
         customer=customer, plan=plan, start_date=start_date, expiry_date=expiry_date, payment_term=payment_term, status=status, **extra,
     )
-    price_lines(subscription, lines)
+    price_lines(subscription, lines, discounts.preview(lines, timezone.localdate()))
     for line in lines:
         line.subscription = subscription
     SubscriptionLine.objects.bulk_create(lines)

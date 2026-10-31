@@ -4,6 +4,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from apps.audit_logs.services import record
+from apps.discounts import services as discounts
 from apps.notifications.services import notify
 from apps.plans.services import ensure_available, ensure_min_quantity, line_unit_price
 from apps.taxes.services import price_lines
@@ -47,7 +48,7 @@ def create_quotation(user, customer, plan=None, template=None, payment_term=None
         customer=customer, plan=plan, template=template, payment_term=payment_term, valid_until=today + timedelta(days=validity),
     )
     built = build_lines(plan, lines, QuotationLine, quotation=quotation)
-    price_lines(quotation, built)
+    price_lines(quotation, built, discounts.preview(built, today))
     QuotationLine.objects.bulk_create(built)
     quotation.number = f"QUO-{quotation.pk:06d}"
     quotation.save()

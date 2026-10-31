@@ -4,6 +4,7 @@ from datetime import timedelta
 from pathlib import Path
 
 import dj_database_url
+from celery.schedules import crontab
 from dotenv import load_dotenv
 
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -121,7 +122,13 @@ CELERY_RESULT_BACKEND = None
 CELERY_TASK_ALWAYS_EAGER = not REDIS_URL
 CELERY_TASK_EAGER_PROPAGATES = True
 CELERY_TIMEZONE = TIME_ZONE
-CELERY_BEAT_SCHEDULE = {}
+CELERY_BEAT_SCHEDULE = {
+    "daily-subscriptions": {"task": "apps.subscriptions.tasks.daily_subscription_task", "schedule": crontab(hour=0, minute=30)},
+    "daily-billing": {"task": "apps.invoices.tasks.run_billing_task", "schedule": crontab(hour=1, minute=0)},
+    "daily-quotations": {"task": "apps.quotations.tasks.expire_quotations_task", "schedule": crontab(hour=1, minute=30)},
+    "daily-overdue": {"task": "apps.invoices.tasks.overdue_reminders_task", "schedule": crontab(hour=9, minute=0)},
+    "daily-discounts": {"task": "apps.discounts.tasks.discount_expiry_task", "schedule": crontab(hour=9, minute=5)},
+}
 if REDIS_URL.startswith("rediss://"):
     CELERY_BROKER_USE_SSL = {"ssl_cert_reqs": "required"}
 
